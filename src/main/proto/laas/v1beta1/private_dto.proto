@@ -1,0 +1,15 @@
+// Definitions of all message types that appear in LaaS private API _only_.
+
+syntax = "proto3";
+
+package laas.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "PrivateDtoProto";
+option java_package = "com.deliveryhero.logistics.customer.laas.v1beta1";
+
+// Debug information about every step in the filtering pipeline.
+message DebugPipelineOutput {
+  string step_name = 1;
+  string outcome = 2;
+}

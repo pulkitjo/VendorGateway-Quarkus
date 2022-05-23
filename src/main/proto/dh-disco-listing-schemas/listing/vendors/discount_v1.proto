@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package vendors.discount;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message Options {
+      string type = 1;
+      repeated int32 menus = 2;
+      repeated int32 product_variations = 3;
+      repeated int32 products = 4;
+      repeated int32 menu_categories = 5;
+}
+
+message Schedule {
+      uint32 weekday = 1;
+      string start_time = 2;
+      string end_time = 3;
+}
+
+message DiscountDetails {
+      int32 id = 1;
+      bool active = 2;
+      double amount_money = 3;
+      double amount_percentage = 4;
+      string start_date = 5;
+      string end_date = 6;
+      bool global = 7;
+      double minimum_order_value = 8;
+      Options options = 9;
+      int32 platform_ratio = 10;
+      int32 promotional_limit = 11;
+      repeated Schedule schedule = 12;
+      string type = 13;
+      repeated string client_platforms = 14;
+      repeated string expedition_types = 15;
+      bool only_for_offers_index = 16;
+}
+
+message DiscountChanged {
+      repeated string vendor_codes = 1;
+      map<string, string> names_by_language = 2;
+      map<string, string> descriptions_by_language = 3;
+      DiscountDetails details = 4;
+}
+
+message DiscountInLanguage {
+      string name = 1;
+      string description = 2;
+      DiscountDetails details = 3;
+      string locale = 4;
+      string timestamp = 5;
+}
+
+message DiscountInLanguageMap {
+      map<int32, DiscountInLanguage> discounts = 1;
+}
+
+message DiscountsByLanguage {
+      map<int32, DiscountInLanguageMap> discounts_by_language = 1;
+}
+
+message VendorRemovedFromDiscount {
+      map<int32, string> removals = 1;
+}
+
+message VendorRemovedFromDiscountByLanguage {
+      map<int32, VendorRemovedFromDiscount> removals_by_language = 1;
+}

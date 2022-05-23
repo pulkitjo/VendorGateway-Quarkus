@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package vendors.translations.vendorinfos;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors.translations";
+
+message VendorInfoTranslation {
+    string name = 1;
+    string description = 2;
+}
+
+message VendorInfoTranslations {
+    string id = 1;
+    map<string, VendorInfoTranslation> translations = 2;
+}

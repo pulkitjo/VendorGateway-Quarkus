@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package dynamicpricing.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "PublicApiProto";
+option java_package = "com.deliveryhero.logistics.customer.dynamicpricing.v1beta1";
+
+import "domain/v1beta1/dto.proto";
+import "dynamicpricing/v1beta1/response_dto.proto";
+import "validate/validate.proto";
+
+// Public API of DPS.
+service PublicAPI {
+  // Retrieve fee information for multiple vendors.
+  rpc GetMultipleVendorsFee(GetMultipleVendorsFeeRequest) returns (GetMultipleVendorsFeeResponse);
+  // Retrieve fee information for a single vendor.
+  rpc GetSingleVendorFee(GetSingleVendorFeeRequest) returns (GetSingleVendorFeeResponse);
+}
+
+// DPS multiple vendor request payload.
+message GetMultipleVendorsFeeRequest {
+  string global_entity_id = 1 [(validate.rules).string.min_len = 1];
+  .domain.v1beta1.Customer customer = 2 [(validate.rules).message.required = true];
+  repeated .domain.v1beta1.Vendor vendors = 3 [(validate.rules).repeated.min_items = 1];
+}
+
+// DPS multiple vendor response payload.
+message GetMultipleVendorsFeeResponse {
+  repeated VendorFee vendor_fees = 1;
+}
+
+//DPS single vendor request payload.
+message GetSingleVendorFeeRequest {
+  string global_entity_id = 1 [(validate.rules).string.min_len = 1];
+  .domain.v1beta1.Vendor vendor = 2 [(validate.rules).message.required = true];
+  .domain.v1beta1.Customer customer = 3 [(validate.rules).message.required = true];
+  .domain.v1beta1.Order order = 4;
+}
+
+// DPS single vendor response payload.
+message GetSingleVendorFeeResponse {
+  VendorFee vendor_fee = 1;
+}

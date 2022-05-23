@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package vendors.characteristic;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message Characteristic {
+  string id = 1;
+  string default_name = 2;
+  string translated_name = 3;
+  bool active = 4;
+  string slug = 5;
+  string type = 6;
+}

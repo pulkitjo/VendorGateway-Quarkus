@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package vendors.translations.characteristics;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors.translations";
+
+message Characteristics {
+  string id = 1;
+  string default_name = 2;
+  map<string, string> translations = 3;
+  bool active = 4;
+  string slug = 5;
+  string type = 6;
+}

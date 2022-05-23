@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package vendors.supervendor;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message SuperVendorEnabled {
+  bool is_super_vendor = 1;
+}

@@ -1,0 +1,6 @@
+# LaaS is the default owner for the repo
+* @deliveryhero/log-customer-logistics-as-a-service
+
+# Team-specific folders are mapped to each team
+/protos/timeestimation/ @deliveryhero/log-customer-time-predictions
+/protos/dynamicpricing/ @deliveryhero/log-customer-pricing

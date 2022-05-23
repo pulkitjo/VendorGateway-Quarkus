@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package vendors.translations.discounts;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors.translations";
+
+message Discounts {
+    string id = 1;
+    map<string, string> translations = 2;
+}

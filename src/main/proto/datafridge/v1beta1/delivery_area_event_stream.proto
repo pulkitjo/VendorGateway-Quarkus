@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package datafridge.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "DeliveryAreaEventStreamProto";
+option java_package = "com.deliveryhero.logistics.customer.datafridge.v1beta1";
+
+import "deliveryareas/v1beta1/domain.proto";
+import "domain/v1beta1/time.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+
+// Delivery Area Event stream schema.
+// https://docs.api.thedatafridge.com/#operation/DeliveryAreaEvent
+message DeliveryAreaEvent {
+  // Required fields
+  repeated string global_entity_ids = 1 [
+    (validate.rules).repeated = {
+      min_items: 1
+      max_items: 1
+    },
+    (validate.rules).repeated.items.string.pattern = "^[A-Z]{2,3}_[A-Z]{2}$"
+  ];
+  string event_id = 2 [(validate.rules).string.min_len = 1];
+  bool active = 3;
+  // For details see https://product.deliveryhero.net/logistics-rider/documentation/event-actions-and-effects
+  // In case of overlapping events the precedence is lockdown > close > shrink > delay.
+  string action = 4 [
+    (validate.rules).string = {
+      in: [
+        "close",
+        "shrink",
+        "delay",
+        "lockdown"
+      ]
+    }
+  ];
+  .domain.v1beta1.UnixTimeMillis timestamp = 5 [(validate.rules).message.required = true];
+  EventFilter filter = 6 [(validate.rules).message.required = true];
+  // Optional fields
+  google.protobuf.DoubleValue value = 7;
+  repeated EventMessage messages = 8;
+}
+
+// Delivery Area Event filter based on polygon and vendor filters.
+message EventFilter {
+  bytes polygon_wkb = 1 [(validate.rules).bytes.min_len = 1];
+  .deliveryareas.v1beta1.VendorFilters vendor_filters = 2;
+}
+
+// Event Message as configured in DAS.
+message EventMessage {
+  // Using IETF language tag standard: https://en.wikipedia.org/wiki/IETF_language_tag
+  // Examples: en-US, en-GB, en
+  string locale = 1 [(validate.rules).string.pattern = "^[a-z]{2}(-[A-Z]{2})?$"];
+  string message = 2 [(validate.rules).string.min_len = 1];
+}

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package datafridge.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "VendorUnavailabilityStreamProto";
+option java_package = "com.deliveryhero.logistics.customer.datafridge.v1beta1";
+
+import "domain/v1beta1/time.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+
+// Vendor Availability Event stream schema.
+// https://docs.api.thedatafridge.com/#operation/VendorAvailability
+message VendorUnavailabilityEvent {
+  // Required fields
+  string global_entity_id = 1 [(validate.rules).string.pattern = "^[A-Z]{2,3}_[A-Z]{2}$"];
+  .domain.v1beta1.UnixTimeMillis timestamp = 2 [(validate.rules).message.required = true];
+  string vendor_id = 3 [(validate.rules).string.min_len = 1];
+  // Optional fields
+  repeated UnavailableReason unavailable_reasons = 4;
+}
+
+// Reason for vendors unavailability.
+message UnavailableReason {
+  string reason = 1 [(validate.rules).string.min_len = 1];
+  .domain.v1beta1.UnixTimeMillis start = 2 [(validate.rules).message.required = true];
+  .domain.v1beta1.UnixTimeMillis end = 3;
+  Author author = 4 [(validate.rules).message.required = true];
+  google.protobuf.BoolValue is_changeable_by_vendor = 5;
+}
+
+// Author - service - pushing the event.
+message Author {
+  string service = 1 [(validate.rules).string.min_len = 1];
+  google.protobuf.StringValue version = 2;
+  google.protobuf.StringValue user = 3;
+}

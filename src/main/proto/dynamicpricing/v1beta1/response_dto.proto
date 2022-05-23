@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package dynamicpricing.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "ResponseDtoProto";
+option java_package = "com.deliveryhero.logistics.customer.dynamicpricing.v1beta1";
+
+import "google/protobuf/wrappers.proto";
+
+// Fee information for a vendor.
+message VendorFee {
+  string vendor_id = 1;
+  // Currency code expressed as ISO-4217 alpha representation
+  // https://en.wikipedia.org/wiki/ISO_4217
+  string currency = 2;
+  DeliveryFee delivery_fee = 3;
+  MinimumOrderValue minimum_order_value = 4;
+  ServiceFee service_fee = 5;
+  repeated FeeReason fee_reason = 6;
+}
+
+// Breakdown of the delivery fee.
+message DeliveryFee {
+  double total = 1;
+  double travel_time = 2;
+  double fleet_utilization = 3;
+  BasketValueFee basket_value_fee = 4;
+  MinimumDeliveryFee minimum_delivery_fee = 5;
+  StandardFee standard_fee = 6;
+}
+
+// Information about the basket value fee component.
+message BasketValueFee {
+  double current_fee_value = 1;
+  google.protobuf.DoubleValue next_fee_value = 2;
+  google.protobuf.DoubleValue next_threshold = 3;
+  google.protobuf.DoubleValue difference_threshold = 4;
+}
+
+// Information about the minimum delivery fee component.
+message MinimumDeliveryFee {
+  MinimumDeliveryFeeType type = 1;
+  google.protobuf.DoubleValue basket_value_threshold = 2;
+  google.protobuf.DoubleValue delivery_fee_total = 3;
+  google.protobuf.DoubleValue discount = 4;
+}
+
+// Information about the standard fee component.
+message StandardFee {
+  double total = 1;
+}
+
+// Possible types for the minimum delivery fee.
+enum MinimumDeliveryFeeType {
+  MINIMUM_DELIVERY_FEE_TYPE_INVALID = 0;
+  MINIMUM_DELIVERY_FEE_TYPE_FREE_DELIVERY = 1;
+  MINIMUM_DELIVERY_FEE_TYPE_BEST_DEAL = 2;
+}
+
+// Breakdown of the minimum order value.
+message MinimumOrderValue {
+  double total = 1;
+  double travel_time = 2;
+  double fleet_utilization = 3;
+}
+
+// Breakdown of the service fee.
+message ServiceFee {
+  double total = 1;
+  double setup_value = 2;
+  ServiceFeeType type = 3;
+  double min_value = 4;
+  double max_value = 5;
+}
+
+// Possible types for the service fee.
+enum ServiceFeeType {
+  SERVICE_FEE_TYPE_INVALID = 0;
+  SERVICE_FEE_TYPE_ABSOLUTE = 1;
+  SERVICE_FEE_TYPE_PERCENTAGE = 2;
+}
+
+// Possible reasons for the fee.
+message FeeReason {
+  FeeReasonType fee_reason_type = 1;
+}
+
+// Possible types for the fee reason.
+enum FeeReasonType {
+  FEE_REASON_TYPE_INVALID = 0;
+  FEE_REASON_TYPE_NEW_CUSTOMER = 1;
+}

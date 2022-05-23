@@ -1,0 +1,46 @@
+// This files holds just the request and response definitions for general LaaS clients.
+
+syntax = "proto3";
+
+package laas.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "PublicApiProto";
+option java_package = "com.deliveryhero.logistics.customer.laas.v1beta1";
+
+import "domain/v1beta1/dto.proto";
+import "laas/v1beta1/dto.proto";
+import "validate/validate.proto";
+
+// Public API of LaaS.
+service PublicAPI {
+  // Retrieve all available vendors based on customer location and filtering.
+  rpc ListAvailableVendors(ListAvailableVendorsRequest) returns (ListAvailableVendorsResponse);
+  //Retrieve availability, delivery fee and time estimate for a single vendor.
+  rpc GetSingleVendor(GetSingleVendorRequest) returns (GetSingleVendorResponse);
+}
+
+message ListAvailableVendorsRequest {
+  string global_entity_id = 1 [(validate.rules).string.pattern = "^[A-Z]{2,3}_[A-Z]{2}$"];
+  .domain.v1beta1.Customer customer = 2 [(validate.rules).message.required = true];
+  VendorFilter vendor_filter = 3 [(validate.rules).message.required = true];
+}
+
+message ListAvailableVendorsResponse {
+  repeated Vendor vendors = 1;
+  repeated DeliveryAreaEvent active_events = 2;
+}
+
+// LaaS single vendor request payload.
+message GetSingleVendorRequest {
+  string global_entity_id = 1 [(validate.rules).string.pattern = "^[A-Z]{2,3}_[A-Z]{2}$"];
+  string vendor_id = 2 [(validate.rules).string.min_len = 1];
+  .domain.v1beta1.Customer customer = 3 [(validate.rules).message.required = true];
+  .domain.v1beta1.Order order = 4;
+}
+
+// LaaS single vendor response payload.
+message GetSingleVendorResponse {
+  Vendor vendor = 1;
+  DeliveryAreaEvent active_event = 2;
+}

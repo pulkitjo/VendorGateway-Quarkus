@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package vendors.chaininfo;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message Chain {
+    string chain_code = 1;
+    string title = 2;
+    bool active = 3;
+}

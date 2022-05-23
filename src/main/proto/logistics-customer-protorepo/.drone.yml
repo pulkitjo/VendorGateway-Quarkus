@@ -1,0 +1,105 @@
+kind: pipeline
+type: kubernetes
+name: ci
+
+trigger:
+  branch:
+    exclude:
+      - main
+  event:
+    push
+
+service_account_name: 'drone-logistics-staging'
+tolerations:
+  - effect: NoSchedule
+    key: app
+    operator: Exists
+node_selector:
+  app: drone
+
+steps:
+  - name: prototool-rules
+    image: uber/prototool:1.10.0
+    commands:
+      - prototool lint --debug
+      - prototool format --diff
+      - git fetch origin main
+      - git branch --track main origin/main || true
+      - prototool break check --git-branch main
+
+---
+kind: pipeline
+type: kubernetes
+name: publish-docs
+
+trigger:
+  branch:
+    main
+  event:
+    push
+
+service_account_name: 'drone-logistics-staging'
+tolerations:
+  - effect: NoSchedule
+    key: app
+    operator: Exists
+node_selector:
+  app: drone
+
+steps:
+  - name: generate-docs
+    image: 683110685365.dkr.ecr.eu-west-1.amazonaws.com/logistics-demand-remote-workstation:protoc-gen-doc-0.0.1
+    pull: always
+    environment:
+      OUTPUT_DIR: output
+    commands:
+      - /entrypoint.sh --doc_opt=:validate/*
+    when:
+      branch:
+        - main
+
+  - name: publish-docs
+    image: plugins/gh-pages
+    settings:
+      pages_directory: output/
+    when:
+      branch:
+        - main
+
+---
+kind: pipeline
+type: kubernetes
+name: kroto
+
+trigger:
+  branch:
+    main
+  event:
+    push
+
+service_account_name: 'drone-logistics-staging'
+tolerations:
+  - effect: NoSchedule
+    key: app
+    operator: Exists
+node_selector:
+  app: drone
+
+steps:
+  -   name: install-distribution
+      image: openjdk:16-slim
+      commands:
+        - cd kroto && ./gradlew clean installDist
+
+  -   name: publish-kroto
+      image: plugins/ecr
+      settings:
+        context: kroto
+        dockerfile: kroto/Dockerfile
+        repo: kroto
+        assume_role: arn:aws:iam::487596255802:role/k8s-staging-eu-drone
+        region: eu-west-1
+        registry: 683110685365.dkr.ecr.eu-west-1.amazonaws.com
+        mirror: https://docker.syslogistics.io
+        tags:
+          - latest

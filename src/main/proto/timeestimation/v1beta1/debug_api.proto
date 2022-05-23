@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package timeestimation.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "DebugApiProto";
+option java_package = "com.deliveryhero.logistics.customer.timeestimation.v1beta1";
+
+import "domain/v1beta1/dto.proto";
+import "timeestimation/v1beta1/debug_dto.proto";
+import "validate/validate.proto";
+
+// Private API of TimeEstimation.
+service DebugAPI {
+  // Retrieve time estimation information for single vendor in debug mode.
+  rpc DebugSingleVendorEstimation(DebugSingleVendorEstimationRequest) returns (DebugSingleVendorEstimationResponse);
+  // Retrieve time estimation information for multiple vendors in debug mode.
+  rpc DebugMultipleVendorsEstimation(DebugMultipleVendorsEstimationRequest) returns (DebugMultipleVendorsEstimationResponse);
+}
+
+//TES single vendor request payload.
+message DebugSingleVendorEstimationRequest {
+  string global_entity_id = 1 [(validate.rules).string.min_len = 1];
+  .domain.v1beta1.Vendor vendor = 2 [(validate.rules).message.required = true];
+  .domain.v1beta1.Customer customer = 3 [(validate.rules).message.required = true];
+  .domain.v1beta1.Order order = 4;
+}
+
+// TES multiple vendor request payload.
+message DebugMultipleVendorsEstimationRequest {
+  string global_entity_id = 1 [(validate.rules).string.min_len = 1];
+  .domain.v1beta1.Customer customer = 2 [(validate.rules).message.required = true];
+  repeated .domain.v1beta1.Vendor vendors = 3 [(validate.rules).repeated.min_items = 1];
+}
+
+//TES multiple vendor response payload.
+message DebugSingleVendorEstimationResponse {
+  VendorTimeEstimation vendor_time_estimations = 1;
+}
+
+message DebugMultipleVendorsEstimationResponse {
+  repeated VendorTimeEstimation vendor_time_estimations = 1;
+}

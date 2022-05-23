@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package timeestimation.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "EstimationApiProto";
+option java_package = "com.deliveryhero.logistics.customer.timeestimation.v1beta1";
+
+import "domain/v1beta1/dto.proto";
+import "timeestimation/v1beta1/estimation_response_dto.proto";
+import "validate/validate.proto";
+
+// Estimations APIs of TES.
+service EstimationAPI {
+  // Retrieve time estimation information for multiple vendors.
+  rpc MultipleVendorsEstimation(MultipleVendorsEstimationRequest) returns (MultipleVendorsEstimationResponse);
+  // Retrieve time estimation information for a single vendor.
+  rpc SingleVendorEstimation(SingleVendorEstimationRequest) returns (SingleVendorEstimationResponse);
+}
+
+//TES multiple vendor request payload.
+message MultipleVendorsEstimationRequest {
+  string global_entity_id = 1 [
+    (validate.rules).string.min_len = 1,
+    (validate.rules).string.pattern = "^[A-Z]{2,3}_[A-Z]{2}$"
+  ];
+  .domain.v1beta1.Customer customer = 2 [(validate.rules).message.required = true];
+  repeated .domain.v1beta1.Vendor vendors = 3 [
+    (validate.rules).repeated.max_items = 7000,
+    (validate.rules).repeated.min_items = 1
+  ];
+  // hurrier_country_code differs from global_entity country. hurrier can have multiple codes for a single GE country
+  // eg: total GEs in TESP are 57 whereas unique country_codes in courier_geo_zone table are 63
+  string country_code = 4 [(validate.rules).string.pattern = "[a-z]{2,3}(-[a-z]{2,3})?$"];
+}
+
+//TES multiple vendor response payload.
+message MultipleVendorsEstimationResponse {
+  repeated MultiVendorTimeEstimation estimation = 1;
+}
+
+//TES single vendor request payload.
+message SingleVendorEstimationRequest {
+  string global_entity_id = 1 [
+    (validate.rules).string.min_len = 1,
+    (validate.rules).string.pattern = "^[A-Z]{2,3}_[A-Z]{2}$"
+  ];
+  .domain.v1beta1.Customer customer = 2 [(validate.rules).message.required = true];
+  .domain.v1beta1.Vendor vendor = 3 [(validate.rules).message.required = true];
+  .domain.v1beta1.Order order = 4;
+  // hurrier_country_code differs from global_entity country. hurrier can have multiple codes for a single GE country
+  // eg: total GEs in TESP are 57 whereas unique country_codes in courier_geo_zone table are 63
+  string country_code = 5 [(validate.rules).string.pattern = "[a-z]{2,3}(-[a-z]{2,3})?$"];
+}
+
+// TES single vendor response payload.
+message SingleVendorEstimationResponse {
+  SingleVendorTimeEstimation estimation = 1;
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package vendors.cuisine;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message Cuisine {
+    string id = 1;
+    string name = 2;
+    string url_key = 3;
+    bool main = 4;
+}
+
+message VendorCuisines {
+    string bid = 1;
+    repeated Cuisine cuisines = 2;
+}
+
+message LangVendorCuisines {
+  map<uint32, VendorCuisines> vendor_cuisines = 1;
+}

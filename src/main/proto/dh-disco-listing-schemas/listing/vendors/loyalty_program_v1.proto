@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package vendors.loyaltyprogram;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message LoyaltyProgramEnabled {
+    double percentage = 1;
+}
+
+message LoyaltyProgramDisabled {
+    string bid = 1;
+}

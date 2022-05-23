@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package vendors.discount;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+
+message PaymentMethod {
+      string id = 1;
+      string name = 2;
+      string provider = 3;
+}
+
+message PaymentMethodsUpdated {
+      string vendor_id = 1;
+      repeated PaymentMethod payment_methods = 2;
+}
+
+message PaymentMethodsUpdatedByLanguage {
+      map<int32, PaymentMethodsUpdated> by_language_map = 1;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package vendors.rating;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message VendorRating {
+    string bid = 1;
+    double average = 2;
+    int32 count = 3;
+}
+
+message LangVendorRating {
+  map<uint32, VendorRating> vendor_rating = 1;
+}

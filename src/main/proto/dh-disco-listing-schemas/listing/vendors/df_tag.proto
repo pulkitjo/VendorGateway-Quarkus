@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package vendors.df_tag;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message DatafridgeTag {
+  string id = 1;
+  string default_name = 2;
+  string translated_name = 3;
+  bool active = 4;
+  string type = 5;
+  repeated string expedition_types = 6;
+}

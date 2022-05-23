@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package domain.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "GeoProto";
+option java_package = "com.deliveryhero.logistics.customer.domain.v1beta1";
+
+import "validate/validate.proto";
+
+// Geographical coordinates expressed with at least 6 decimal degrees of precision.
+message Coordinate {
+  double latitude = 1 [
+    (validate.rules).double = {
+      gte: -90
+      lte: 90
+    }
+  ];
+  double longitude = 2 [
+    (validate.rules).double = {
+      gte: -180
+      lte: 180
+    }
+  ];
+}

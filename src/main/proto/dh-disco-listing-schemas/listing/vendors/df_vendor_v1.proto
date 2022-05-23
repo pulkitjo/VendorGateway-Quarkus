@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package vendors.dfvendor;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+
+message Tag {
+    string id = 1;
+    string name = 2;
+    string subtype = 3;
+    string timestamp = 4;
+}
+
+message TagId {
+  string tag_id = 1;
+  string assignment_time = 2;
+}
+
+message DataFridgeVendor {
+      repeated Tag tags = 1;
+      bool only_show_open_on_rlp = 2;
+      int32 min_preorder_time_offset_in_minutes = 3;
+      repeated string vertical_ids = 4;
+      string vertical_parent = 5;
+      string vertical_type = 6;
+      repeated string characteristic_ids = 7;
+      repeated string cuisine_ids = 8;
+      string main_cuisine_id = 9;
+      repeated TagId tag_ids = 10;
+      string delivery_provider = 11;
+      bool provides_dine_out_services = 12;
+}

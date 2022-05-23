@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package domain.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "TimeProto";
+option java_package = "com.deliveryhero.logistics.customer.domain.v1beta1";
+
+import "validate/validate.proto";
+
+// Timestamp expressed as Unix time in UTC with millisecond precision.
+// https://en.wikipedia.org/wiki/Unix_time
+message UnixTimeMillis {
+  uint64 millis = 1 [(validate.rules).uint64.gt = 0];
+}
+
+//A Duration represents fixed-length span of time represented as a count of seconds.
+message Duration {
+  uint64 seconds = 1 [(validate.rules).uint64.gt = 0];
+}

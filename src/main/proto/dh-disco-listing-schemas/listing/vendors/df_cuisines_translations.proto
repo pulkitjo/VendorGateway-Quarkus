@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package vendors.translations.df_cuisines;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors.translations";
+
+message DatafridgeCuisines {
+  string id = 1;
+  string default_name = 2;
+  map<string, string> translations = 3;
+  string parent_id = 4;
+  bool active = 5;
+  string slug = 6;
+  string image_url = 7;
+}

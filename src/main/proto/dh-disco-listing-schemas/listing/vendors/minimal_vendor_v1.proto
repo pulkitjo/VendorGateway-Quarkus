@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package vendors.rating;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+// TODO - check if it can be imported from vendor_info_v1.proto
+message Location {
+    double latitude = 1;
+    double longitude = 2;
+}
+
+enum Weekday {
+    WEEKDAY_INVALID = 0;
+    WEEKDAY_SUNDAY = 1;
+    WEEKDAY_MONDAY = 2;
+    WEEKDAY_TUESDAY = 3;
+    WEEKDAY_WEDNESDAY = 4;
+    WEEKDAY_THURSDAY = 5;
+    WEEKDAY_FRIDAY = 6;
+    WEEKDAY_SATURDAY = 7;
+}
+
+enum Tag {
+    TAG_INVALID = 0;
+    TAG_HAS_DELIVERY_PROVIDER = 1;
+    TAG_BEST_IN_CITY = 2;
+    TAG_DELIVERY_ENABLED = 3;
+    TAG_PICKUP_ENABLED = 4;
+    TAG_HALAL = 5;
+    TAG_VEGETARIAN = 6;
+    TAG_PREMIUM = 7;
+    TAG_TEST = 8;
+    TAG_HAS_ONLINE_PAYMENT = 9;
+}
+
+message Schedule {
+    Weekday weekday = 1;
+    string start_time = 2;
+    string end_time = 3;
+}
+
+message Discount {
+    string	id = 1;
+    string	type = 2;
+    string	start_date = 3;
+    string	end_date = 4;
+    repeated Schedule schedules = 5;
+    repeated string	client_platforms = 6;
+    repeated string expedition_types = 7;
+    bool active = 8;
+    bool only_for_offers_index = 9;
+}
+
+message ChainInfo {
+    string code = 1;
+    string name = 2;
+    bool is_accepting_global_vouchers = 3;
+    string main_vendor_code = 4;
+    string url_key = 5;
+}
+
+message IdentifiableTag {
+    string id = 1;
+    string name = 2;
+    string subtype = 3;
+    string timestamp = 4;
+}
+
+message TagId {
+    string tag_id = 1;
+    string assignment_time = 2;
+}
+
+message Vendor {
+    string id = 1;
+    string new_until = 2;
+    int32 minimum_delivery_time = 3;
+    int32 minimum_pickup_time = 4;
+    double rating_score = 5;
+    int32 rating_count = 6;
+    repeated Discount discounts = 7;
+    string budget_id = 8;
+    repeated string cuisine_ids = 9;
+
+    repeated string	characteristics_ids = 11;
+    string	main_cuisine_id = 12;
+    string	chain_id = 13 [deprecated=true];
+
+    repeated Tag tags = 14;
+    string	vertical_id = 15;
+    repeated string	payment_ids = 16;
+    string time_zone = 17;
+    bool deduplicate_chain = 18;
+    bool active = 19;
+    bool accept_voucher = 20;
+    int32 points = 21;
+
+    string address = 22;
+    string address_line2 = 23;
+    string address_line_other = 24;
+    string post_code = 25;
+    string url_key = 26;
+    string redirection_url = 27;
+    string hero_image = 28;
+    string hero_listing_image = 29;
+    bool loyalty_program_enabled = 30;
+    double loyalty_percentage_amount = 31;
+    int32 legacy_id = 32;
+    bool is_vat_included = 33;
+    string customer_type = 34;
+    bool accepts_instructions = 35;
+
+    map<string, string> names = 36;
+    map<string, string> descriptions = 37;
+
+    string city_name = 38;
+
+    ChainInfo chain_info = 39;
+
+    int32 vendor_score = 40;
+
+    repeated IdentifiableTag identifiable_tags = 41;
+    double vendor_score_as_double = 42;
+    map<string,double> vendor_score_variants = 43;
+    bool only_show_open_on_rlp = 44;
+    int32 min_preorder_time_offset_in_minutes = 45;
+
+    repeated string vertical_ids = 46;
+    string vertical_parent = 47;
+    string vertical_type = 48;
+
+    repeated string	df_characteristics_ids = 49;
+    repeated string	df_cuisines_ids = 50;
+    string df_main_cuisine_id = 51;
+    repeated TagId df_tags_ids = 52;
+
+    bool is_super_vendor = 53;
+    Location location = 54;
+
+    string legal_name = 55;
+    string trade_register_number = 56;
+    string delivery_provider = 57;
+    bool provides_dine_out_services = 58;
+    string customer_phone = 59;
+}

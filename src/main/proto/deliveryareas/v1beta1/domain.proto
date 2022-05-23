@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package deliveryareas.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "DomainProto";
+option java_package = "com.deliveryhero.logistics.customer.deliveryareas.v1beta1";
+
+import "deliveryareas/v1beta1/dsl_options.proto";
+import "validate/validate.proto";
+
+// Set of expressions used to filter vendors with.
+// Multiple filter expressions are chained together with Logical OR operation
+message VendorFilters {
+  repeated VendorFilterExpression expressions = 1 [(validate.rules).repeated.min_items = 1];
+}
+
+// VendorFilterExpression represents a list of filtering conditions that are chained together with Logical AND operation.
+message VendorFilterExpression {
+  repeated VendorFilterCondition conditions = 1 [(validate.rules).repeated.min_items = 1];
+}
+
+// VendorFilterClause encapsulates a single condition to filter vendors with.
+message VendorFilterCondition {
+  VendorFilterOperator operator = 1 [
+    (validate.rules).enum = {
+      defined_only: true
+      not_in: [
+        0
+      ]
+    }
+  ];
+  VendorFilterField field = 2 [
+    (validate.rules).enum = {
+      defined_only: true
+      not_in: [
+        0
+      ]
+    }
+  ];
+  repeated string values = 3 [
+    (validate.rules).repeated.items.string.min_len = 1,
+    (validate.rules).repeated.min_items = 1
+  ];
+}
+
+// Operators allowed within the Vendor Filter DSL.
+enum VendorFilterOperator {
+  VENDOR_FILTER_OPERATOR_INVALID = 0;
+  VENDOR_FILTER_OPERATOR_IS = 1 [(label) = "$is"];
+  VENDOR_FILTER_OPERATOR_NOT = 2 [(label) = "$not"];
+  VENDOR_FILTER_OPERATOR_IN = 3 [(label) = "$in"];
+  VENDOR_FILTER_OPERATOR_NOT_ALL = 4 [(label) = "$nall"];
+  VENDOR_FILTER_OPERATOR_ALL = 5 [(label) = "$all"];
+  VENDOR_FILTER_OPERATOR_NONE_OF = 6 [(label) = "$nin"];
+}
+
+// Fields that can be used to filter vendors with.
+// Currently only includes the fields used by Pandora
+enum VendorFilterField {
+  VENDOR_FILTER_FIELD_INVALID = 0;
+  VENDOR_FILTER_FIELD_HALAL = 1 [(label) = "halal"];
+  VENDOR_FILTER_FIELD_CHAIN_IDS = 2 [(label) = "chains"];
+  VENDOR_FILTER_FIELD_VERTICAL_TYPES = 3 [(label) = "vertical_types"];
+  VENDOR_FILTER_FIELD_DELIVERY_TYPES = 4 [(label) = "delivery_types"];
+}

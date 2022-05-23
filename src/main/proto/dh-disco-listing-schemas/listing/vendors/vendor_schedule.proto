@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package vendors.vendorschedule;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message VendorSchedule{
+  string vendor_id = 1;
+  map<string, OpeningType> schedules = 2;
+  repeated SpecialDay special_days = 3;
+}
+
+message OpeningType{
+  repeated TimeRange delivery = 1;
+  repeated TimeRange pickup = 2;
+}
+
+message TimeRange{
+  string from = 1;
+  string to = 2;
+}
+
+message SpecialDay{
+  string date = 1;
+  repeated TimeRangeInSpecialDay delivery = 2;
+  repeated TimeRangeInSpecialDay pickup = 3;
+}
+
+message TimeRangeInSpecialDay{
+  string from = 1;
+  string to = 2;
+  string reason = 3;
+}

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package domain.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "DtoProto";
+option java_package = "com.deliveryhero.logistics.customer.domain.v1beta1";
+
+import "domain/v1beta1/geo.proto";
+import "domain/v1beta1/identifier.proto";
+import "domain/v1beta1/time.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+
+// Customer-specific information requested in each API call.
+message Customer {
+  UserId user_id = 1;
+  SessionId session_id = 2;
+  .domain.v1beta1.UnixTimeMillis session_timestamp = 3;
+  .domain.v1beta1.Coordinate location = 4 [(validate.rules).message.required = true];
+}
+
+// Information about the current state of the customer's order.
+message Order {
+  // Currency code expressed as ISO-4217 alpha representation
+  // https://en.wikipedia.org/wiki/ISO_4217
+  string currency = 1 [(validate.rules).string.pattern = "^[A-Z]{3}$"];
+  google.protobuf.DoubleValue basket_value = 2;
+  repeated Product products = 3;
+}
+
+// Information about vendor whose information is requested.
+message Vendor {
+  string id = 1 [(validate.rules).string.min_len = 1];
+}
+
+// Represents a Product in the order.
+message Product {
+  string id = 1 [(validate.rules).string.min_len = 1];
+  int32 quantity = 2 [(validate.rules).int32.gt = 0];
+}

@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package timeestimation.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "DebugDtoProto";
+option java_package = "com.deliveryhero.logistics.customer.timeestimation.v1beta1";
+
+import "domain/v1beta1/time.proto";
+
+// Time Estimation Response for a vendor.
+message VendorTimeEstimation {
+  string vendor_id = 1;
+  DeliveryEstimates delivery_estimates = 2;
+  DrivingEstimates driving_estimates = 3;
+  PreparationEstimates preparation_estimates = 4;
+  DelayEstimates delay_estimates = 5;
+  PickupEstimates pickup_estimates = 6;
+  DropOffEstimates drop_off_estimates = 7;
+  domain.v1beta1.Duration buffer_duration = 8;
+  domain.v1beta1.UnixTimeMillis delivery_time = 9;
+}
+
+// Delay estimate components.
+message DelayEstimates {
+  domain.v1beta1.Duration order_delay_duration = 1;
+  domain.v1beta1.Duration zone_delay_mean_duration = 2;
+  domain.v1beta1.Duration zone_delay_quantile_duration = 3;
+}
+
+// Full Delivery estimate of the estimation response.
+message DeliveryEstimates {
+  domain.v1beta1.Duration delivery_duration = 1;
+}
+
+// Preparation estimate components.
+message PreparationEstimates {
+  domain.v1beta1.Duration preparation_duration = 1;
+  domain.v1beta1.Duration buffer_duration = 2;
+}
+
+// Driving estimate components.
+message DrivingEstimates {
+  domain.v1beta1.Duration driving_duration = 1;
+}
+
+// Pickup location task estimate components.
+message PickupEstimates {
+  domain.v1beta1.UnixTimeMillis pickup_time = 1;
+  domain.v1beta1.Duration walk_in_duration = 2;
+  domain.v1beta1.Duration walk_out_duration = 3;
+  domain.v1beta1.Duration service_duration = 4;
+}
+
+// Dropoff location task estimate components .
+message DropOffEstimates {
+  domain.v1beta1.Duration walk_in_duration = 1;
+  domain.v1beta1.Duration walk_out_duration = 2;
+  domain.v1beta1.Duration service_duration = 3;
+}

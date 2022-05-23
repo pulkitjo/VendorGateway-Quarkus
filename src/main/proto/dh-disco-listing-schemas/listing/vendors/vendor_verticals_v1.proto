@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package vendors.vertical;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message Vertical {
+    string id = 1;
+    string defaultName = 2;
+    string translatedName = 3;
+    string parent_id = 4;
+    bool active = 5;
+    string img_url = 6;
+    int32 rank= 7;
+}

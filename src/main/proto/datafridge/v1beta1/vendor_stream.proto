@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package datafridge.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "VendorStreamProto";
+option java_package = "com.deliveryhero.logistics.customer.datafridge.v1beta1";
+
+import "domain/v1beta1/geo.proto";
+import "domain/v1beta1/time.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+
+// Whitelist of vendor attributes from the vendor stream needed by customer domain.
+// WARNING: The vendor stream contains GDPR personal data so only map data that we truly need
+// Please ensure that the names correspond to the field names in the API https://docs.api.thedatafridge.com/#operation/Vendor
+message Vendor {
+  // Required fields
+  string vendor_id = 1 [(validate.rules).string.min_len = 1];
+  string global_entity_id = 2 [(validate.rules).string.pattern = "^[A-Z]{2,3}_[A-Z]{2}$"];
+  string name = 3 [(validate.rules).string.min_len = 1];
+  bool active = 4;
+  bool test_vendor = 5;
+  repeated string delivery_types = 6 [
+    (validate.rules).repeated.items.string = {
+      in: [
+        "vendor_delivery",
+        "pickup",
+        "platform_delivery",
+        "partner_delivery"
+      ]
+    }
+  ];
+  .domain.v1beta1.UnixTimeMillis creation_date = 7 [(validate.rules).message.required = true];
+  .domain.v1beta1.UnixTimeMillis timestamp = 8 [(validate.rules).message.required = true];
+  .domain.v1beta1.Coordinate location = 9 [(validate.rules).message.required = true];
+  repeated string customer_types = 10 [
+    (validate.rules).repeated.items.string = {
+      in: [
+        "b2b",
+        "b2c"
+      ]
+    }
+  ];
+  //for future required fields
+  reserved 11 to 19;
+  // Optional fields
+  google.protobuf.StringValue vertical_type = 20 [(validate.rules).string.min_len = 1];
+  google.protobuf.StringValue vertical_parent = 21 [(validate.rules).string.min_len = 1];
+  repeated string tags = 22;
+  google.protobuf.BoolValue key_account = 23;
+  google.protobuf.BoolValue is_contracted = 24;
+  google.protobuf.BoolValue halal = 25;
+  .domain.v1beta1.UnixTimeMillis activation_date = 26;
+  google.protobuf.StringValue chain_name = 27 [(validate.rules).string.min_len = 1];
+  google.protobuf.BoolValue allow_preorder = 28;
+  google.protobuf.StringValue chain_id = 29 [(validate.rules).string.min_len = 1];
+}

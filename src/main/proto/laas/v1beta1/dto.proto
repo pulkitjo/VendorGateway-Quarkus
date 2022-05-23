@@ -1,0 +1,72 @@
+// Definitions of all message types that appear in LaaS public API _only_.
+
+syntax = "proto3";
+
+package laas.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "DtoProto";
+option java_package = "com.deliveryhero.logistics.customer.laas.v1beta1";
+
+import "domain/v1beta1/vendor.proto";
+import "dynamicpricing/v1beta1/public_api.proto";
+import "google/protobuf/wrappers.proto";
+import "laas/v1beta1/domain.proto";
+import "timeestimation/v1beta1/estimation_api.proto";
+import "validate/validate.proto";
+
+// Supported vendor filtering options.
+message VendorFilter {
+  .domain.v1beta1.CustomerType customer_type = 1 [
+    (validate.rules).enum = {
+      defined_only: true
+      not_in: [
+        0
+      ]
+    }
+  ];
+  google.protobuf.StringValue vertical_parent = 2 [(validate.rules).string.min_len = 1];
+  google.protobuf.StringValue vertical_type = 3 [(validate.rules).string.min_len = 1];
+  google.protobuf.BoolValue exclude_private_vendors = 4;
+  google.protobuf.BoolValue exclude_vendors_without_schedule = 5;
+}
+
+// Aggregate information returned for a single vendor by LaaS API.
+message Vendor {
+  string vendor_id = 1;
+  laas.v1beta1.VendorScheduleStatus schedule_status = 2;
+  laas.v1beta1.CustomerVendorGeoStatus geo_status = 3;
+  laas.v1beta1.OfflineStatus offline_status = 4;
+  //maps to OfflineReason in vendor-availability stream
+  string offline_reason = 5;
+  oneof delivery_fee {
+    laas.v1beta1.FallbackPricingResponse fallback_pricing_response = 6;
+    dynamicpricing.v1beta1.GetSingleVendorFeeResponse dps_response = 7;
+  }
+  oneof delivery_time_estimate {
+    laas.v1beta1.FallbackTimeEstimateResponse fallback_time_estimate_response = 8;
+    timeestimation.v1beta1.SingleVendorEstimationResponse tes_response = 9;
+  }
+  google.protobuf.StringValue applied_delivery_area_event_id = 10;
+  // If the vendor is currently closed and becomes available according the vendor-schedule and vendor-availability streams within the next 4 days,
+  // this field returns that absolute point in time, stating the vendor's UTC offset as per RFC-3339.
+  google.protobuf.StringValue available_at_in_vendor_local_time = 11;
+}
+
+// Geo-constraints driven vendor availability.
+enum CustomerVendorGeoStatus {
+  CUSTOMER_VENDOR_GEO_STATUS_INVALID = 0;
+  CUSTOMER_VENDOR_GEO_STATUS_AVAILABLE = 1;
+  CUSTOMER_VENDOR_GEO_STATUS_OUTSIDE_DELIVERY_AREA = 2;
+  CUSTOMER_VENDOR_GEO_STATUS_VENDOR_UNDER_LOCKDOWN = 3;
+  CUSTOMER_VENDOR_GEO_STATUS_CUSTOMER_UNDER_LOCKDOWN = 4;
+  CUSTOMER_VENDOR_GEO_STATUS_VENDOR_UNDER_SHRINKING = 5;
+  CUSTOMER_VENDOR_GEO_STATUS_CLOSED_FOR_CUSTOMER = 6;
+}
+
+// Delivery-area event information.
+message DeliveryAreaEvent {
+  string id = 1;
+  EventAction event_action = 2;
+  repeated LocalizedMessage messages = 3;
+}

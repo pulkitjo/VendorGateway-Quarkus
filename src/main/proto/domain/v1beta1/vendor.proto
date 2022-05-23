@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package domain.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "VendorProto";
+option java_package = "com.deliveryhero.logistics.customer.domain.v1beta1";
+
+// Delivery types for a vendor.
+enum DeliveryType {
+  DELIVERY_TYPE_INVALID = 0;
+  DELIVERY_TYPE_VENDOR = 1;
+  DELIVERY_TYPE_PICKUP = 2;
+  DELIVERY_TYPE_PLATFORM = 3;
+  DELIVERY_TYPE_PARTNER = 4;
+}
+
+// Customer types that a vendor supports.
+enum CustomerType {
+  CUSTOMER_TYPE_INVALID = 0;
+  CUSTOMER_TYPE_B2B = 1;
+  CUSTOMER_TYPE_B2C = 2;
+}

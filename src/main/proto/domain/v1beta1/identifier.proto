@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package domain.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "IdentifierProto";
+option java_package = "com.deliveryhero.logistics.customer.domain.v1beta1";
+
+import "validate/validate.proto";
+
+// Source system that generated the identifier.
+enum IdentifierSource {
+  IDENTIFIER_SOURCE_INVALID = 0;
+  IDENTIFIER_SOURCE_PERSEUS = 1;
+}
+
+// Unique id for a user.
+message UserId {
+  IdentifierSource source = 1;
+  string id = 2 [(validate.rules).string.min_len = 1];
+}
+
+// Unique id for a user session.
+message SessionId {
+  IdentifierSource source = 1;
+  string id = 2 [(validate.rules).string.min_len = 1];
+}

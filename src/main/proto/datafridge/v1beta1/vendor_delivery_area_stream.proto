@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package datafridge.v1beta1;
+
+option java_multiple_files = true;
+option java_outer_classname = "VendorDeliveryAreaStreamProto";
+option java_package = "com.deliveryhero.logistics.customer.datafridge.v1beta1";
+
+import "domain/v1beta1/time.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+
+// Vendor Delivery Area stream schema.
+message VendorDeliveryArea {
+  // Required fields
+  string global_entity_id = 1 [(validate.rules).string.pattern = "^[A-Z]{2,3}_[A-Z]{2}$"];
+  .domain.v1beta1.UnixTimeMillis timestamp = 2 [(validate.rules).message.required = true];
+  // CountryCode expressed as ISO3166-2
+  // https://en.wikipedia.org/wiki/ISO_3166-2
+  string country_code = 3 [(validate.rules).string.pattern = "[A-Z]{2}$"];
+  string vendor_id = 4 [(validate.rules).string.min_len = 1];
+  // Optional fields
+  repeated DeliveryArea delivery_areas = 5;
+}
+
+// Specific delivery area object for vendor-delivery-area stream.
+message DeliveryArea {
+  google.protobuf.StringValue delivery_area_id = 1;
+  google.protobuf.DoubleValue delivery_fee = 2 [(validate.rules).double.gte = 0];
+  google.protobuf.DoubleValue minimum_order_value = 3 [(validate.rules).double.gte = 0];
+  google.protobuf.DoubleValue delivery_time = 4 [(validate.rules).double.gte = 0];
+  repeated string shrinking = 5;
+  google.protobuf.StringValue status = 6 [
+    (validate.rules).string = {
+      in: [
+        "open",
+        "busy"
+      ]
+    }
+  ];
+  bytes polygon_wkb = 7 [(validate.rules).bytes.min_len = 1];
+}

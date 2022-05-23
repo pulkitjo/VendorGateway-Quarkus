@@ -1,0 +1,21 @@
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+*.sc
+*.gradle/
+
+# IntelliJ project files
+logs
+target
+out
+gen
+*.iml
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID

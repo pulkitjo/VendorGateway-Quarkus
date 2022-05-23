@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package vendors.vendorinfo;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message Location {
+      double latitude = 1;
+      double longitude = 2;
+}
+
+message ChainInfo {
+    string code = 1;
+    string name = 2;
+    bool is_accepting_global_vouchers = 3;
+    string main_vendor_code = 4;
+    string url_key = 5;
+}
+
+message VendorInfo {
+      int32 id = 1;
+      string code = 2;
+      string name = 3;
+      string description = 4;
+      string address = 5;
+      string address_line2 = 6;
+      string address_line_other = 7;
+      string budget = 8;
+      string city = 9;
+      string post_code = 10;
+
+      bool has_delivery_provider = 11;
+      string hero_image = 12;
+      string hero_listing_image = 13;
+      bool is_active = 14;
+      bool is_best_in_city = 15;
+
+      bool is_delivery_enabled = 16;
+
+      string is_new_until = 17;
+      bool is_pickup_enabled = 18;
+      bool is_premium = 19;
+
+      Location location = 20;
+
+      int32 minimum_delivery_time = 21;
+      int32 minimum_pickup_time = 22;
+
+      string redirection_url = 23;
+      string url_key = 24;
+      string vertical = 25;
+      bool is_test = 26;
+
+      string chain_id = 27 [deprecated=true];
+      bool is_chain_active = 28 [deprecated=true];
+
+      string time_zone = 29;
+      bool accept_discount = 30;
+      bool accept_voucher = 31;
+      int32 points = 32;
+      bool is_vat_included = 33;
+      string customer_type = 34;
+      bool accepts_instructions = 35;
+
+      ChainInfo chain_info = 36;
+
+      string legal_name = 37;
+      string trade_register_number = 38;
+      CustomerContactPhone customer_contact_phone = 39;
+}
+
+message LangVendorInfo {
+  map<uint32, VendorInfo> vendor_info = 1;
+}
+
+message CustomerContactPhone{
+      string description = 1;
+}

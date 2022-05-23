@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package vendors.vendorscore;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message VendorScore {
+    int32 vendor_score = 1;
+    double vendor_score_as_double = 2;
+    map<string,double> variants = 3;
+}
+

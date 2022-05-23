@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package vendors.cuisine;
+
+option java_package = "com.deliveryhero.protobufserde.listing.vendors";
+
+message DeliveryAreaEvent {
+    string id = 1;
+    string action = 2;
+    bool active = 3;
+    string message = 4;
+}
+
+message LangDeliveryAreaEvents {
+  map<uint32, DeliveryAreaEvent> delivery_area_events = 1;
+}

@@ -1,0 +1,9 @@
+language: minimal
+sudo: true
+
+install:
+  - curl -sSL https://github.com/uber/prototool/releases/download/v1.3.0/prototool-Linux-x86_64 -o ./prototool && chmod +x ./prototool
+
+script:
+  - find . -name \*.proto | ./prototool lint --debug
+  - find . -name \*.proto | ./prototool compile

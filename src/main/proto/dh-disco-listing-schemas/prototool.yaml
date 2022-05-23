@@ -1,0 +1,21 @@
+protoc:
+  # The Protobuf version to use from https://github.com/protocolbuffers/protobuf/releases.
+  # By default use 3.6.1.
+  # You probably want to set this to make your builds completely reproducible.
+  version: 3.6.1
+  allow_unused_imports: true
+
+# Lint directives.
+lint:
+  # Linter rules.
+  # Run prototool list-all-linters to see all available linters.
+  rules:
+    # The specific linters to remove.
+    remove:
+      - FILE_OPTIONS_REQUIRE_GO_PACKAGE
+      - FILE_OPTIONS_REQUIRE_JAVA_MULTIPLE_FILES
+      - FILE_OPTIONS_REQUIRE_JAVA_OUTER_CLASSNAME
+      - FILE_OPTIONS_JAVA_PACKAGE_SAME_IN_DIR
+      - FILE_OPTIONS_EQUAL_JAVA_PACKAGE_COM_PREFIX
+      - PACKAGES_SAME_IN_DIR
+
