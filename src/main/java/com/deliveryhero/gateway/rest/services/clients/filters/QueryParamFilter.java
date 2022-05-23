@@ -29,9 +29,6 @@ public class QueryParamFilter implements ClientRequestFilter {
             for (Object key : allParam.keySet()) {
                 uriBuilder.queryParam(key.toString(), allParam.get(key));
             }
-            /*uriBuilder.queryParam("country","sg");
-            uriBuilder.queryParam("latitude","1.340400");
-            uriBuilder.queryParam("longitude","103.709000");*/
             requestContext.setUri(uriBuilder.build());
             requestContext.setEntity(null);
         }

@@ -1,11 +1,5 @@
 package com.deliveryhero.gateway.persistence;
-
-
-
-import com.deliveryhero.protobufserde.listing.vendors.MinimalVendorV1;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
-import io.quarkus.panache.common.Parameters;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
