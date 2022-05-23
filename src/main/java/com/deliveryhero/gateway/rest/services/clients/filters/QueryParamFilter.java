@@ -23,9 +23,9 @@ public class QueryParamFilter implements ClientRequestFilter {
 
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
-        if (requestContext.getEntity() instanceof Map && requestContext.getMethod().equals(HttpMethod.GET)) {
+        if (requestContext.getEntity() instanceof QueryParams && requestContext.getMethod().equals(HttpMethod.GET)) {
             UriBuilder uriBuilder = UriBuilder.fromUri(requestContext.getUri());
-            Map allParam = (Map)requestContext.getEntity();
+            Map allParam = (Map)((QueryParams) requestContext.getEntity()).params;
             for (Object key : allParam.keySet()) {
                 uriBuilder.queryParam(key.toString(), allParam.get(key));
             }
