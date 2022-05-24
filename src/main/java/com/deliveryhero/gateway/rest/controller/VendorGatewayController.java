@@ -65,5 +65,14 @@ public class VendorGatewayController {
 
     }
 
+    @GET
+    @Path("/vendors/listing")
+    public Uni<VendorGatewayResponse> getVendorsFromListing() {
+
+
+        return vendorService.getRLPResponseUsingListing(uriInfo.getQueryParameters());
+
+    }
+
 
 }

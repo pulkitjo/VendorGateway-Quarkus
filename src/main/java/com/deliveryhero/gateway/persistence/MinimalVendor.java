@@ -1,11 +1,10 @@
 package com.deliveryhero.gateway.persistence;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
-
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -13,8 +12,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Entity
+@Cacheable
 @Table(name = "minimal_vendor_tbl")
-@NamedQueries({@NamedQuery(name = "MinimalVendor.getBybid", query = "from MinimalVendor where bid = ?1")})
 public class MinimalVendor extends PanacheEntityBase {
 
     @Id
@@ -37,7 +36,7 @@ public class MinimalVendor extends PanacheEntityBase {
 
     public String protobuf;
 
-
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public static List<MinimalVendor> getVendorByBID(Set<String> bids){
         List<MinimalVendor> res=null;
         try(Stream<MinimalVendor> mvs =MinimalVendor.streamAll()){

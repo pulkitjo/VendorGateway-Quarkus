@@ -4,7 +4,10 @@ import com.deliveryhero.gateway.rest.models.availability.response.AvailabilityRe
 import com.deliveryhero.gateway.rest.models.dps.DpsResponse;
 import com.deliveryhero.gateway.rest.models.listing.MinimalVendorResponse;
 
+import javax.enterprise.context.RequestScoped;
+
 @lombok.Builder @lombok.NoArgsConstructor @lombok.AllArgsConstructor @lombok.Setter @lombok.Getter
+@RequestScoped
 public class VendorGatewayResponse {
 
     AvailabilityResponse availabilityResponse;
