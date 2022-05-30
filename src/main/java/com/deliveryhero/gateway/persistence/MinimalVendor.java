@@ -19,6 +19,7 @@ public class MinimalVendor extends PanacheEntityBase {
     @Id
     public String bid;
 
+    private static List<MinimalVendor> mvs;
 
     public String topic;
 
@@ -36,13 +37,19 @@ public class MinimalVendor extends PanacheEntityBase {
 
     public String protobuf;
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
+
     public static List<MinimalVendor> getVendorByBID(Set<String> bids){
         List<MinimalVendor> res=null;
-        try(Stream<MinimalVendor> mvs =MinimalVendor.streamAll()){
-        res = mvs.filter(mv -> bids.contains(mv.bid)).collect(Collectors.toList());
+
+        if(mvs==null){
+            try(Stream<MinimalVendor> stream =MinimalVendor.streamAll()){
+                mvs = stream.collect(Collectors.toList());
+            }
 
         }
+
+        res = mvs.stream().filter(mv -> bids.contains(mv.bid)).collect(Collectors.toList());
+
 
         return res;
 

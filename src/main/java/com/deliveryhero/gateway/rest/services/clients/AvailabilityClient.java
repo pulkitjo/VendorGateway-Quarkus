@@ -5,6 +5,7 @@ import com.deliveryhero.gateway.rest.models.availability.response.AvailabilityRe
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.buffer.Buffer;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -23,7 +24,8 @@ public interface AvailabilityClient {
     @Path("/vendors")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @CircuitBreaker(requestVolumeThreshold = 20,delay = 5000)
+    @CircuitBreaker()
+    //@Timeout()
     @ClientHeaderParam(name = "Accept", value = "application/octet-stream")
     Uni<InputStream> getAvailableVendors(AvailabilityRequest request);
 }

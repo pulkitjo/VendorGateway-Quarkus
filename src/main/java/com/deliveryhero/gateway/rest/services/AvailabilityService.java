@@ -40,21 +40,12 @@ public class AvailabilityService extends AbstractService{
 
 
     public Uni<AvailabilityResponse> getAvailableVendors(MultivaluedMap<String,String> uriQueryParameters) {
-
-
-
+        mapper = JsonMapper.builder().findAndAddModules().build();
         AvailabilityRequest req = formAvailabilityRequest(uriQueryParameters);
 
-
          return availabilityClient.getAvailableVendors(req).onItem().transform(item -> {
-
-                     AvailabilityResponse response = null;
-
-                  mapper = JsonMapper.builder()
-                          .findAndAddModules()
-                          .build();
-
-                     try {
+             AvailabilityResponse response = null;
+                  try {
                         response = mapper.readValue(item.readAllBytes(),AvailabilityResponse.class);
                      } catch (IOException e) {
                          e.printStackTrace();

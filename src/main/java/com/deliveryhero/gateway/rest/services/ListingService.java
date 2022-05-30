@@ -7,10 +7,12 @@ import com.deliveryhero.gateway.rest.models.listing.MinimalVendorResponse;
 import com.deliveryhero.gateway.rest.services.clients.ListingClient;
 import com.deliveryhero.gateway.rest.services.clients.filters.QueryParams;
 import io.smallrye.mutiny.Uni;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,12 +26,15 @@ public class ListingService extends AbstractService {
     MinimalVendorResponse minimalVendorResponse;
 
 
+
     @RestClient
     ListingClient listingClient;
 
     @Inject
     QueryParams queryParams;
 
+
+    @CircuitBreaker
     public Uni<MinimalVendorResponse> getMinimalVendors(AvailabilityResponse availabilityResponse){
 
 
